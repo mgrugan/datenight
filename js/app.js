@@ -1,39 +1,37 @@
 /* ============================================================
    Noor Date Nights — app logic
-   Tabs, idea rendering, calendar, and localStorage scheduling.
    ============================================================ */
 
-const STORE_KEY = "noorDateNights.scheduled.v1";
+const STORE_KEY = "noorDateNights.scheduled.v2";
+const ALL_ITEMS = [...IDEAS, ...RESTAURANTS, ...EVENTS];
+const byId = (id) => ALL_ITEMS.find((x) => x.id === id);
 
-const HEART =
-  '<svg class="heart-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.2C.4 8.4 2 5 5.3 5c2 0 3.4 1.2 4.2 2.4l.5.8.5-.8C11.3 6.2 12.7 5 14.7 5 18 5 19.6 8.4 22 11.8 19.5 16.4 12 21 12 21z"/></svg>';
+/* ---- small inline icons (Lucide-style, 16px) ---- */
+const I = {
+  pin: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>',
+  bus: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M4 11h16M8 16v2M16 16v2"/></svg>',
+  arrow:
+    '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>',
+  plus: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
+};
+const esc = (s) => String(s).replace(/"/g, "&quot;");
 
-function icon(paths, color) {
-  return (
-    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="' +
-    color +
-    '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-    paths +
-    "</svg>"
-  );
-}
-
-/* ---------- storage ---------- */
-function loadScheduled() {
+/* ---- storage ---- */
+function load() {
   try {
     return JSON.parse(localStorage.getItem(STORE_KEY)) || [];
   } catch (e) {
     return [];
   }
 }
-function saveScheduled(list) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(list));
+function save() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(scheduled));
 }
-let scheduled = loadScheduled();
+let scheduled = load();
 
-/* ---------- date helpers ---------- */
-function fmtLong(dateStr) {
-  const [y, m, d] = dateStr.split("-").map(Number);
+/* ---- date helpers ---- */
+function fmtLong(ds) {
+  const [y, m, d] = ds.split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -41,8 +39,8 @@ function fmtLong(dateStr) {
     year: "numeric",
   });
 }
-function fmtShort(dateStr) {
-  const [y, m, d] = dateStr.split("-").map(Number);
+function fmtShort(ds) {
+  const [y, m, d] = ds.split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -50,97 +48,84 @@ function fmtShort(dateStr) {
 }
 function todayStr() {
   const n = new Date();
-  return (
-    n.getFullYear() +
-    "-" +
-    String(n.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(n.getDate()).padStart(2, "0")
-  );
+  return [
+    n.getFullYear(),
+    String(n.getMonth() + 1).padStart(2, "0"),
+    String(n.getDate()).padStart(2, "0"),
+  ].join("-");
 }
 
-/* ---------- tabs ---------- */
+/* ---- tabs ---- */
 const views = {
   ideas: document.getElementById("view-ideas"),
-  summer: document.getElementById("view-summer"),
+  events: document.getElementById("view-events"),
   calendar: document.getElementById("view-calendar"),
 };
 function switchTab(name) {
-  Object.keys(views).forEach((k) => {
-    views[k].hidden = k !== name;
-  });
+  Object.keys(views).forEach((k) => (views[k].hidden = k !== name));
   document.querySelectorAll(".tab").forEach((t) => {
-    const active = t.dataset.tab === name;
-    t.classList.toggle("active", active);
-    t.setAttribute("aria-selected", active ? "true" : "false");
+    const on = t.dataset.tab === name;
+    t.classList.toggle("active", on);
+    t.setAttribute("aria-selected", on ? "true" : "false");
   });
   if (name === "calendar") renderCalendar();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-document.querySelectorAll(".tab, [data-goto]").forEach((el) => {
-  el.addEventListener("click", () =>
-    switchTab(el.dataset.tab || el.dataset.goto)
-  );
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-tab],[data-goto]");
+  if (el) switchTab(el.dataset.tab || el.dataset.goto);
 });
 
-/* ---------- idea cards ---------- */
-function ideaCard(idea) {
-  const cat = CATEGORIES[idea.category];
-  const dated = idea.eventDate
-    ? '<div class="meta-row" style="color:var(--cta)">' +
-      icon(CATEGORIES.events.icon, "var(--cta)") +
-      "<span>" +
-      fmtLong(idea.eventDate) +
-      "</span></div>"
+/* ---- category tag ---- */
+function catTag(catKey) {
+  const c = CATEGORIES[catKey];
+  return (
+    '<span class="cat-tag"><span class="cat-dot" style="background:' +
+    c.accent +
+    '"></span>' +
+    c.label +
+    "</span>"
+  );
+}
+
+/* ---- idea / restaurant card ---- */
+function card(item) {
+  const isResto = item.category === "dinner";
+  const transit = item.transit
+    ? '<div class="meta">' + I.bus + "<span>" + item.transit + "</span></div>"
+    : "";
+  const budget = item.budget
+    ? '<div class="budget"><b>~$80 plan:</b> ' + item.budget + "</div>"
     : "";
   return (
-    '<article class="clay idea-card">' +
-    '<div class="flex items-center justify-between mb-2">' +
-    '<span class="badge" style="background:' +
-    cat.soft +
-    ";color:" +
-    cat.accent +
-    '">' +
-    icon(cat.icon, cat.accent) +
-    cat.label +
-    "</span>" +
-    "</div>" +
-    '<h3 class="font-ui" style="font-weight:700;font-size:1.18rem;color:var(--text);margin:.2rem 0 .5rem">' +
-    idea.title +
+    '<article class="card">' +
+    catTag(item.category) +
+    "<h3>" +
+    item.title +
     "</h3>" +
-    '<p style="margin:0 0 .9rem;color:var(--text);font-size:1.02rem">' +
-    idea.blurb +
+    '<p class="blurb">' +
+    item.blurb +
     "</p>" +
-    '<div class="mt-auto space-y-1">' +
-    '<div class="meta-row">' +
-    icon(
-      '<path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2"/>',
-      "var(--text-soft)"
-    ) +
+    '<div class="meta">' +
+    I.pin +
     "<span>" +
-    idea.where +
+    item.where +
     "</span></div>" +
-    '<div class="meta-row">' +
-    icon(
-      '<rect x="3" y="6" width="18" height="11" rx="2"/><path d="M3 11h18M7 17v2M17 17v2"/>',
-      "var(--text-soft)"
-    ) +
-    "<span>" +
-    idea.transit +
-    "</span></div>" +
-    dated +
-    "</div>" +
-    '<div class="flex items-center gap-2 mt-4">' +
-    '<button class="btn btn-primary add-btn" data-id="' +
-    idea.id +
-    '" style="flex:1;justify-content:center">' +
-    HEART +
-    "Add to calendar</button>" +
-    '<a class="btn btn-ghost" href="' +
-    idea.source +
-    '" target="_blank" rel="noopener" aria-label="Learn more about ' +
-    idea.title.replace(/"/g, "") +
-    '">Info</a>' +
+    transit +
+    budget +
+    '<div class="card-foot">' +
+    '<button class="btn btn-primary btn-sm add-btn" data-id="' +
+    item.id +
+    '" style="flex:1">' +
+    I.plus +
+    (isResto ? "Plan this dinner" : "Add to calendar") +
+    "</button>" +
+    '<a class="text-link" href="' +
+    item.link +
+    '" target="_blank" rel="noopener">' +
+    (item.linkLabel || "Details") +
+    I.arrow +
+    "</a>" +
     "</div>" +
     "</article>"
   );
@@ -148,21 +133,54 @@ function ideaCard(idea) {
 
 function renderIdeas(filter) {
   const grid = document.getElementById("ideas-grid");
-  const list = IDEAS.filter(
+  const items = [...IDEAS, ...RESTAURANTS].filter(
     (i) => filter === "all" || i.category === filter
   );
-  grid.innerHTML = list.map(ideaCard).join("");
-  bindAddButtons(grid);
+  grid.innerHTML = items.map(card).join("");
 }
 
-function renderSummer() {
-  const grid = document.getElementById("summer-grid");
-  const list = IDEAS.filter((i) => i.season === "summer");
-  grid.innerHTML = list.map(ideaCard).join("");
-  bindAddButtons(grid);
+/* ---- events list ---- */
+function eventRow(ev) {
+  return (
+    '<div class="event-row">' +
+    '<div class="event-date"><div class="d-label">' +
+    ev.dateLabel +
+    "</div>" +
+    (ev.time ? '<div class="d-time">' + ev.time + "</div>" : "") +
+    "</div>" +
+    '<div class="event-main">' +
+    catTag(ev.category) +
+    "<h3>" +
+    ev.title +
+    "</h3>" +
+    '<p class="blurb">' +
+    ev.blurb +
+    "</p>" +
+    '<div class="meta">' +
+    I.pin +
+    "<span>" +
+    ev.where +
+    "</span></div></div>" +
+    '<div class="event-actions">' +
+    '<button class="btn btn-primary btn-sm add-btn" data-id="' +
+    ev.id +
+    '">' +
+    I.plus +
+    "Add</button>" +
+    '<a class="text-link" href="' +
+    ev.link +
+    '" target="_blank" rel="noopener">' +
+    (ev.linkLabel || "Details") +
+    I.arrow +
+    "</a></div>" +
+    "</div>"
+  );
+}
+function renderEvents() {
+  document.getElementById("events-list").innerHTML = EVENTS.map(eventRow).join("");
 }
 
-/* ---------- filters ---------- */
+/* ---- filters ---- */
 document.querySelectorAll("#filter-bar .pill").forEach((p) => {
   p.addEventListener("click", () => {
     document
@@ -173,31 +191,30 @@ document.querySelectorAll("#filter-bar .pill").forEach((p) => {
   });
 });
 
-/* ---------- add-to-calendar modal ---------- */
+/* ---- add-to-calendar modal ---- */
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modal-title");
 const dateInput = document.getElementById("date-input");
 const noteInput = document.getElementById("note-input");
-let pendingIdeaId = null;
+let pendingId = null;
 
-function bindAddButtons(scope) {
-  scope.querySelectorAll(".add-btn").forEach((b) => {
-    b.addEventListener("click", () => openModal(b.dataset.id));
-  });
-}
-
-function openModal(ideaId) {
-  const idea = IDEAS.find((i) => i.id === ideaId);
-  pendingIdeaId = ideaId;
-  modalTitle.textContent = idea.title;
-  dateInput.value = idea.eventDate || SEASON_START;
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".add-btn");
+  if (b) openModal(b.dataset.id);
+});
+function openModal(id) {
+  const item = byId(id);
+  if (!item) return;
+  pendingId = id;
+  modalTitle.textContent = item.title;
+  dateInput.value = item.date || DEFAULT_DATE;
   noteInput.value = "";
   modal.hidden = false;
-  setTimeout(() => dateInput.focus(), 50);
+  setTimeout(() => dateInput.focus(), 40);
 }
 function closeModal() {
   modal.hidden = true;
-  pendingIdeaId = null;
+  pendingId = null;
 }
 document.getElementById("modal-cancel").addEventListener("click", closeModal);
 modal.addEventListener("click", (e) => {
@@ -206,61 +223,51 @@ modal.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !modal.hidden) closeModal();
 });
-
 document.getElementById("modal-save").addEventListener("click", () => {
-  if (!pendingIdeaId || !dateInput.value) return;
-  const idea = IDEAS.find((i) => i.id === pendingIdeaId);
+  if (!pendingId || !dateInput.value) return;
+  const item = byId(pendingId);
   scheduled.push({
     uid: Date.now() + "-" + Math.random().toString(36).slice(2, 7),
-    ideaId: idea.id,
-    title: idea.title,
-    category: idea.category,
+    itemId: item.id,
+    title: item.title,
+    category: item.category,
     date: dateInput.value,
     note: noteInput.value.trim(),
   });
-  saveScheduled(scheduled);
+  save();
   closeModal();
-  toast("Added " + idea.title + " to " + fmtShort(dateInput.value));
-  updateBadge();
+  toast("Saved — " + item.title + " on " + fmtShort(dateInput.value));
+  updateChip();
 });
 
-/* ---------- toast ---------- */
+/* ---- toast ---- */
 let toastTimer;
 function toast(msg) {
   const t = document.getElementById("toast");
-  t.querySelector("span").textContent = msg;
+  t.textContent = msg;
   t.classList.add("show");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
 }
 
-/* ---------- calendar ---------- */
+/* ---- calendar ---- */
 let calYear = 2026;
-let calMonth = 6; // 0-indexed → July 2026 (the heart of the window)
-
-function eventsOn(dateStr) {
-  return scheduled.filter((s) => s.date === dateStr);
-}
+let calMonth = 6; // July 2026
+const eventsOn = (ds) => scheduled.filter((s) => s.date === ds);
 
 function renderCalendar() {
-  const monthLabel = document.getElementById("cal-month-label");
   const grid = document.getElementById("cal-grid");
   const first = new Date(calYear, calMonth, 1);
   const startDow = first.getDay();
-  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const days = new Date(calYear, calMonth + 1, 0).getDate();
+  document.getElementById("cal-month-label").textContent =
+    first.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
-  monthLabel.textContent = first.toLocaleDateString("en-US", {
-    month: "long",
-    year: "numeric",
-  });
-
-  const dows = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  let html = dows.map((d) => '<div class="cal-dow">' + d + "</div>").join("");
-
-  for (let i = 0; i < startDow; i++) {
-    html += '<div class="cal-cell empty"></div>';
-  }
-  for (let day = 1; day <= daysInMonth; day++) {
+  let html = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    .map((d) => '<div class="cal-dow">' + d + "</div>")
+    .join("");
+  for (let i = 0; i < startDow; i++) html += '<div class="cal-cell empty"></div>';
+  for (let day = 1; day <= days; day++) {
     const ds =
       calYear +
       "-" +
@@ -272,19 +279,12 @@ function renderCalendar() {
       "cal-cell" +
       (evs.length ? " has-events" : "") +
       (ds === todayStr() ? " today" : "");
-    const dots = evs.length
-      ? '<div class="cal-dot-row">' +
-        evs
-          .slice(0, 4)
-          .map(
-            (e) =>
-              '<span class="cal-dot" style="background:' +
-              CATEGORIES[e.category].accent +
-              '"></span>'
-          )
-          .join("") +
-        "</div>"
-      : "";
+    let chips = evs
+      .slice(0, 2)
+      .map((e) => '<span class="cal-evt">' + e.title + "</span>")
+      .join("");
+    if (evs.length > 2)
+      chips += '<span class="cal-more">+' + (evs.length - 2) + " more</span>";
     html +=
       '<button class="' +
       cls +
@@ -296,59 +296,45 @@ function renderCalendar() {
       '"><span class="day-num">' +
       day +
       "</span>" +
-      dots +
+      chips +
       "</button>";
   }
   grid.innerHTML = html;
-  grid.querySelectorAll(".cal-cell:not(.empty)").forEach((c) => {
-    c.addEventListener("click", () => showDay(c.dataset.date));
-  });
-
+  grid.querySelectorAll(".cal-cell:not(.empty)").forEach((c) =>
+    c.addEventListener("click", () => showDay(c.dataset.date))
+  );
   renderUpcoming();
 }
 
-function showDay(dateStr) {
+function showDay(ds) {
   const panel = document.getElementById("day-panel");
-  const evs = eventsOn(dateStr).sort((a, b) => a.title.localeCompare(b.title));
-  let html =
-    '<h3 class="font-ui" style="font-weight:700;font-size:1.1rem;color:var(--primary);margin:0 0 .8rem">' +
-    fmtLong(dateStr) +
-    "</h3>";
+  const evs = eventsOn(ds).sort((a, b) => a.title.localeCompare(b.title));
+  let html = "<h3>" + fmtLong(ds) + "</h3>";
   if (!evs.length) {
     html +=
-      '<p style="color:var(--text-soft);margin:0">Nothing planned yet — pick a date idea to fill this day. 💗</p>';
+      '<p style="color:var(--muted);margin:0">Nothing planned for this day yet.</p>';
   } else {
-    html += evs.map(plannedRow).join("");
+    html += evs.map(planRow).join("");
   }
   panel.innerHTML = html;
-  bindRemoveButtons(panel);
+  bindRemoves(panel);
 }
 
-function plannedRow(ev) {
-  const cat = CATEGORIES[ev.category];
+function planRow(ev) {
   return (
-    '<div class="clay-soft" style="padding:.8rem 1rem;margin-bottom:.7rem;display:flex;align-items:flex-start;gap:.7rem">' +
-    '<span class="badge" style="background:#fff;color:' +
-    cat.accent +
-    ';flex-shrink:0">' +
-    icon(cat.icon, cat.accent) +
-    cat.label +
-    "</span>" +
-    '<div style="flex:1">' +
-    '<div class="font-ui" style="font-weight:700;color:var(--text)">' +
+    '<div class="plan-item">' +
+    '<div class="plan-body"><div class="t">' +
+    catTag(ev.category) +
+    "</div><div class=\"t\" style=\"margin-top:.3rem\">" +
     ev.title +
     "</div>" +
-    (ev.note
-      ? '<div style="font-size:.95rem;color:var(--text-soft)">' +
-        ev.note +
-        "</div>"
-      : "") +
+    (ev.note ? '<div class="n">' + ev.note + "</div>" : "") +
     "</div>" +
-    '<button class="remove-btn" data-uid="' +
+    '<button class="remove-x" data-uid="' +
     ev.uid +
     '" aria-label="Remove ' +
-    ev.title.replace(/"/g, "") +
-    '" style="border:none;background:transparent;cursor:pointer;color:var(--text-soft);font-family:Quicksand;font-weight:700">✕</button>' +
+    esc(ev.title) +
+    '">✕</button>' +
     "</div>"
   );
 }
@@ -358,94 +344,81 @@ function renderUpcoming() {
   const sorted = [...scheduled].sort((a, b) => a.date.localeCompare(b.date));
   if (!sorted.length) {
     wrap.innerHTML =
-      '<div class="empty-state"><p style="font-size:1.1rem">No dates planned yet.</p>' +
-      '<p>Head to <button class="link-btn" data-goto="ideas">Date Ideas</button> and start filling the calendar. 💕</p></div>';
-    wrap.querySelectorAll("[data-goto]").forEach((b) =>
-      b.addEventListener("click", () => switchTab(b.dataset.goto))
-    );
+      '<div class="empty-state"><p>No dates planned yet.</p><p>Browse <button class="link-btn" data-goto="ideas">Date Ideas</button> or <button class="link-btn" data-goto="events">July Events</button> to start filling the calendar.</p></div>';
     return;
   }
   wrap.innerHTML = sorted
     .map((ev) => {
-      const cat = CATEGORIES[ev.category];
+      const dt = new Date(ev.date + "T00:00");
       return (
-        '<div class="clay" style="padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;margin-bottom:.7rem">' +
-        '<div style="text-align:center;flex-shrink:0;width:54px">' +
-        '<div class="font-ui" style="font-weight:700;color:var(--primary);font-size:1.4rem;line-height:1">' +
-        new Date(ev.date + "T00:00").getDate() +
-        "</div>" +
-        '<div class="font-ui" style="font-size:.75rem;color:var(--text-soft);text-transform:uppercase">' +
-        new Date(ev.date + "T00:00").toLocaleDateString("en-US", {
-          month: "short",
-        }) +
+        '<div class="plan-item">' +
+        '<div class="plan-when"><div class="dd">' +
+        dt.getDate() +
+        '</div><div class="mm">' +
+        dt.toLocaleDateString("en-US", { month: "short" }) +
         "</div></div>" +
-        '<div style="flex:1">' +
-        '<div class="font-ui" style="font-weight:700;color:var(--text)">' +
+        '<div class="plan-body"><div class="t">' +
         ev.title +
-        "</div>" +
-        '<div class="meta-row">' +
-        icon(cat.icon, cat.accent) +
-        cat.label +
+        "</div><div class=\"n\">" +
+        CATEGORIES[ev.category].label +
         (ev.note ? " · " + ev.note : "") +
         "</div></div>" +
-        '<button class="remove-btn" data-uid="' +
+        '<button class="remove-x" data-uid="' +
         ev.uid +
         '" aria-label="Remove ' +
-        ev.title.replace(/"/g, "") +
-        '" style="border:none;background:transparent;cursor:pointer;color:var(--text-soft);font-family:Quicksand;font-weight:700;font-size:1.1rem">✕</button>' +
+        esc(ev.title) +
+        '">✕</button>' +
         "</div>"
       );
     })
     .join("");
-  bindRemoveButtons(wrap);
+  bindRemoves(wrap);
 }
 
-function bindRemoveButtons(scope) {
-  scope.querySelectorAll(".remove-btn").forEach((b) => {
+function bindRemoves(scope) {
+  scope.querySelectorAll(".remove-x").forEach((b) =>
     b.addEventListener("click", () => {
       scheduled = scheduled.filter((s) => s.uid !== b.dataset.uid);
-      saveScheduled(scheduled);
+      save();
       renderCalendar();
-      updateBadge();
+      updateChip();
       toast("Removed from your calendar");
-    });
-  });
+    })
+  );
 }
 
 document.getElementById("cal-prev").addEventListener("click", () => {
-  calMonth--;
-  if (calMonth < 0) {
+  if (--calMonth < 0) {
     calMonth = 11;
     calYear--;
   }
   renderCalendar();
 });
 document.getElementById("cal-next").addEventListener("click", () => {
-  calMonth++;
-  if (calMonth > 11) {
+  if (++calMonth > 11) {
     calMonth = 0;
     calYear++;
   }
   renderCalendar();
 });
 
-/* ---------- planned count badge ---------- */
-function updateBadge() {
-  const b = document.getElementById("plan-count");
-  const n = scheduled.length;
-  b.textContent = n;
-  b.style.display = n ? "inline-flex" : "none";
+/* ---- planned-count chip ---- */
+function updateChip() {
+  const c = document.getElementById("plan-count");
+  c.textContent = scheduled.length;
+  c.style.display = scheduled.length ? "inline-flex" : "none";
 }
 
-/* ---------- surprise me ---------- */
+/* ---- surprise me ---- */
 document.getElementById("surprise-btn").addEventListener("click", () => {
-  const pick = IDEAS[Math.floor(Math.random() * IDEAS.length)];
-  switchTab("ideas");
+  const pool = [...IDEAS, ...RESTAURANTS, ...EVENTS];
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  switchTab(pick.kind === "event" ? "events" : "ideas");
   openModal(pick.id);
 });
 
-/* ---------- init ---------- */
+/* ---- init ---- */
 renderIdeas("all");
-renderSummer();
-updateBadge();
+renderEvents();
+updateChip();
 switchTab("ideas");

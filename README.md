@@ -5,12 +5,14 @@ onto a shared calendar.
 
 ## What's inside
 
-- **Date Ideas** — a gallery of spots all within ~15 min drive or ~30 min bus
-  of Pitt's campus, filterable by category (dinner, culture, outdoors, movies,
-  active, views, summer events).
-- **Summer 2026** — special events happening **June 30 – August 30, 2026**
-  (Summer Fridays at the Frick, Fourth of July fireworks, Cinema in the Park,
-  and more). Dated events drop straight onto the right day.
+- **Date Ideas** — curated evergreen ideas plus a hand-picked set of dinner
+  spots (each with a "~$80 after tip" plan), filterable by category (dinner,
+  culture, outdoors, active, views, movies).
+- **July Events** — a chronological list of real things happening around
+  Oakland and the city in **July 2026** (Cinema in the Park, the Inside Out
+  series, Picklesburgh, the Vintage Grand Prix, Phipps garden evenings and
+  more). Dated events drop straight onto the right day; every item links out
+  to its official page.
 - **Calendar** — a month view (defaults to July 2026) showing everything you've
   planned, plus a running list of all your date nights. Tap any day to see the
   plans, add notes, or remove them.
@@ -33,27 +35,30 @@ from branch) and it'll be live.
 
 ## Design
 
-Built following the **UI/UX Pro Max** design system:
+Built following the **UI/UX Pro Max** design system — a clean, editorial,
+minimal-single-column aesthetic:
 
-- **Style:** Claymorphism — soft, chunky, playful 3D surfaces
-- **Palette:** romantic pink (`#DB2777`) + elegant gold (`#CA8A04`)
-- **Fonts:** Great Vibes (display) · Quicksand (UI) · Cormorant Infant (body)
+- **Style:** refined editorial — generous whitespace, hairline borders, restrained color
+- **Palette:** warm ivory (`#FAF7F2`) + deep wine accent (`#8E2C48`)
+- **Fonts:** Playfair Display (display) · Inter (UI / body)
 
 ## Structure
 
 ```
 index.html        # markup + layout
-css/styles.css    # claymorphism theme
-js/data.js        # the date-idea data (edit to add your own!)
+css/styles.css    # editorial theme
+js/data.js        # ideas, restaurants and events (edit to add your own!)
 js/app.js         # tabs, calendar, and scheduling logic
 ```
 
-Want to add your own date idea? Drop a new entry into the `IDEAS` array in
-`js/data.js`.
+Want to add your own? Drop entries into the `IDEAS`, `RESTAURANTS` or `EVENTS`
+arrays in `js/data.js`.
 
 ## Sources
 
-Date spots and summer events gathered from Visit Pittsburgh, The Pitt News,
-Discover the Burgh, The Frick Pittsburgh, NEXTpittsburgh, Cozymeal, and
-University of Pittsburgh transit info (links live on each card's **Info**
-button).
+Events and venues link out to their official pages — Phipps Conservatory,
+Carnegie Museum of Art (Inside Out series), Pittsburgh Parks, Picklesburgh, the
+Pittsburgh Vintage Grand Prix, Dollar Bank Cinema in the Park, BikePGH, the
+Pittsburgh Cultural Trust, and each restaurant's own menu. Always double-check
+dates and prices on the official page before you go — annual event dates can
+shift.

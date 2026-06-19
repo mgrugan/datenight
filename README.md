@@ -1,4 +1,3 @@
-# Noor Date Nights 💕
 
 A cute, romantic little date-night planner built for Noor. Browse date ideas
 around the University of Pittsburgh (Oakland) campus, then drop your favorites

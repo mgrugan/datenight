@@ -58,11 +58,6 @@ export default function Card({ item, onAdd }) {
         )}
       </div>
 
-      {item.budget && (
-        <div className="mt-4 rounded-xl bg-white/[0.04] px-3 py-2.5 text-[0.8rem] text-cream/70">
-          <span className="font-semibold text-rose-soft">~$80 plan:</span> {item.budget}
-        </div>
-      )}
 
       <div className="mt-auto flex items-center gap-3 pt-5">
         <button

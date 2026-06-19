@@ -31,7 +31,7 @@ export const FILTERS = [
 ];
 
 /* Each item:
-   id, category, title, blurb, where, [transit], [budget],
+   id, category, title, blurb, where, [transit],
    [date 'YYYY-MM-DD'], [dateLabel], [time], link, linkLabel  */
 export const ITEMS = [
   /* ---------- Evergreen date ideas ---------- */
@@ -108,61 +108,61 @@ export const ITEMS = [
     link: "https://www.thefrickpittsburgh.org/", linkLabel: "Frick info",
   },
 
-  /* ---------- Restaurants (dinner, aiming ~$80 after tip) ---------- */
+  /* ---------- Restaurants (dinner dates near campus) ---------- */
   {
     id: "girasole", category: "dinner", title: "Girasole",
     blurb:
       "Higher-end-feeling Italian — romantic and rustic without the wild pricing. Pastas run high-teens to high-20s (penne marinara $17, several around $27–28).",
-    where: "Shadyside", budget: "Two pasta entrées, split a cheaper starter, skip drinks.",
+    where: "Shadyside",
     link: "https://www.girasolepgh.com/seasonal-menu", linkLabel: "Menu",
   },
   {
     id: "point-brugge", category: "dinner", title: "Point Brugge Cafe",
     blurb:
       "A cozy neighborhood bistro that feels like a real date restaurant without being too formal — Belgian-leaning, with mussels, flatbreads and a $19 mezze.",
-    where: "Point Breeze", budget: "Split a starter + two lower/mid entrées, or do mussels & flatbread.",
+    where: "Point Breeze",
     link: "https://www.pointbrugge.com/point-brugge-dinner-menu", linkLabel: "Menu",
   },
   {
     id: "butterjoint", category: "dinner", title: "Butterjoint",
     blurb:
       "Closest to Pitt and the most elevated of the cozy spots — North Oakland food and drinks with French-bistro leanings at 208 N. Craig St.",
-    where: "North Oakland · Craig Street", budget: "Best on happy hour: $6 appetizers and $8 classic cocktails, 4–6 PM.",
+    where: "North Oakland · Craig Street",
     link: "https://butterjoint.com/the-menu/", linkLabel: "Menu",
   },
   {
     id: "pasha", category: "dinner", title: "Pasha Cafe & Lounge",
     blurb:
       "An elevated Mediterranean & Turkish date spot in Shadyside. Appetizers around $7.50–$8.50, salads around $14 — easy to share generously.",
-    where: "Shadyside", budget: "Split hummus or grape leaves + two mains, skip alcohol.",
+    where: "Shadyside",
     link: "https://pashacafe.net/menu", linkLabel: "Menu",
   },
   {
     id: "piccolo-forno", category: "dinner", title: "Piccolo Forno",
     blurb:
       "Warm, handmade-pasta-and-pizza Italian in Lawrenceville. It's BYOB with an $8 cork fee, so you can bring wine without the restaurant markup.",
-    where: "Lawrenceville", budget: "Split one app + two pastas/pizzas; BYOB only if you want wine.",
+    where: "Lawrenceville",
     link: "https://www.piccolo-forno.com/menu/", linkLabel: "Menu",
   },
   {
     id: "mercurios", category: "dinner", title: "Mercurio's Shadyside",
     blurb:
       "Casual-but-charming Neapolitan pizza, wine and house gelato on Walnut Street (5523 Walnut St). A relaxed, feel-good dinner.",
-    where: "Shadyside", budget: "Two pizzas + gelato, or one app — easy to stay near $80.",
+    where: "Shadyside",
     link: "https://mercuriosgelatopizza.com/pittsburgh-shadyside-mercurio-s-shadyside-food-menu", linkLabel: "Menu",
   },
   {
     id: "senti", category: "dinner", title: "Senti",
     blurb:
       "A more upscale Italian wine-bar in Lawrenceville — the upper edge of the budget. Starters like meatballs ($11), arancini ($13) and apps around $20–22.",
-    where: "Lawrenceville", budget: "Two modest mains or one app + lighter plates, no drinks.",
+    where: "Lawrenceville",
     link: "https://www.sentirestaurant.com/senti-restaurant-menus/", linkLabel: "Menu",
   },
   {
     id: "union-grill", category: "dinner", title: "Union Grill",
     blurb:
       "Less romantic but reliable and a short walk from Pitt — an old-school Oakland tradition that's a notch above fast-casual.",
-    where: "Oakland · Craig Street", budget: "Two entrées + maybe an appetizer.",
+    where: "Oakland · Craig Street",
     link: "https://www.uniongrilloakland.com/menus/", linkLabel: "Menu",
   },
 

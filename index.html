@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noor Date Nights 💕</title>
+    <meta
+      name="description"
+      content="A cute little date-night planner for Noor — pick ideas around Pittsburgh and drop them on the calendar."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Great+Vibes&family=Quicksand:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      .link-btn {
+        border: none;
+        background: transparent;
+        color: var(--primary);
+        font-family: "Quicksand", sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== Header / Nav ===== -->
+    <header class="px-4 pt-6">
+      <div
+        class="clay"
+        style="
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 1rem 1.4rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 1rem;
+        "
+      >
+        <div style="display: flex; align-items: center; gap: 0.6rem">
+          <span
+            style="color: var(--primary); font-size: 1.8rem; display: flex"
+            aria-hidden="true"
+          >
+            <svg class="heart-svg" viewBox="0 0 24 24" style="width:1.6rem;height:1.6rem;fill:currentColor">
+              <path d="M12 21s-7.5-4.6-10-9.2C.4 8.4 2 5 5.3 5c2 0 3.4 1.2 4.2 2.4l.5.8.5-.8C11.3 6.2 12.7 5 14.7 5 18 5 19.6 8.4 22 11.8 19.5 16.4 12 21 12 21z"/>
+            </svg>
+          </span>
+          <span class="font-script" style="font-size: 2.1rem; color: var(--primary)"
+            >Noor Date Nights</span
+          >
+        </div>
+        <nav
+          role="tablist"
+          aria-label="Sections"
+          style="display: flex; gap: 0.3rem; flex-wrap: wrap; align-items: center"
+        >
+          <button class="tab" role="tab" data-tab="ideas">Date Ideas</button>
+          <button class="tab" role="tab" data-tab="summer">Summer 2026</button>
+          <button class="tab" role="tab" data-tab="calendar" style="position: relative">
+            Calendar
+            <span
+              id="plan-count"
+              style="
+                display: none;
+                align-items: center;
+                justify-content: center;
+                background: var(--cta);
+                color: #fff;
+                font-family: Quicksand;
+                font-weight: 700;
+                font-size: 0.7rem;
+                min-width: 18px;
+                height: 18px;
+                border-radius: 999px;
+                padding: 0 4px;
+                margin-left: 4px;
+              "
+            ></span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main style="max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 4rem">
+      <!-- ===== View: Date Ideas ===== -->
+      <section id="view-ideas" role="tabpanel">
+        <!-- Hero -->
+        <div
+          class="clay"
+          style="
+            padding: 2.4rem 1.6rem;
+            text-align: center;
+            margin-bottom: 1.6rem;
+            background:
+              radial-gradient(circle at 20% 0%, #ffe3f1 0%, transparent 60%),
+              #fff;
+          "
+        >
+          <p
+            class="font-ui"
+            style="
+              color: var(--cta);
+              font-weight: 700;
+              letter-spacing: 0.08em;
+              text-transform: uppercase;
+              font-size: 0.85rem;
+              margin: 0 0 0.4rem;
+            "
+          >
+            For Noor, with love
+          </p>
+          <h1
+            class="font-script"
+            style="font-size: clamp(2.6rem, 8vw, 4.2rem); color: var(--primary); margin: 0"
+          >
+            Pick a date, make a memory
+          </h1>
+          <p
+            style="
+              max-width: 560px;
+              margin: 0.8rem auto 1.6rem;
+              font-size: 1.15rem;
+              color: var(--text);
+            "
+          >
+            A little collection of date ideas all within a short hop of Pitt's
+            campus — from Oakland dinners to fireworks over the rivers. Tap a
+            favorite and drop it onto our calendar.
+          </p>
+          <div style="display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap">
+            <button class="btn btn-gold" id="surprise-btn">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.1 4.3 4.7.7-3.4 3.3.8 4.7L12 17l-4.2 2.2.8-4.7L5.2 8l4.7-.7z"/></svg>
+              Surprise me
+            </button>
+            <button class="btn btn-primary" data-goto="calendar">
+              View our calendar
+            </button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div
+          id="filter-bar"
+          style="
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1.4rem;
+          "
+        >
+          <button class="pill active" data-filter="all">All</button>
+          <button class="pill" data-filter="dinner">Dinner</button>
+          <button class="pill" data-filter="culture">Culture</button>
+          <button class="pill" data-filter="outdoors">Outdoors</button>
+          <button class="pill" data-filter="movies">Movies</button>
+          <button class="pill" data-filter="active">Active</button>
+          <button class="pill" data-filter="views">Views</button>
+          <button class="pill" data-filter="events">Summer Events</button>
+        </div>
+
+        <div
+          id="ideas-grid"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1.2rem;
+          "
+        ></div>
+      </section>
+
+      <!-- ===== View: Summer 2026 ===== -->
+      <section id="view-summer" role="tabpanel" hidden>
+        <div class="clay" style="padding: 2rem 1.6rem; text-align: center; margin-bottom: 1.6rem">
+          <p
+            class="font-ui"
+            style="color: var(--cta); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.85rem; margin: 0 0 0.4rem"
+          >
+            June 30 – August 30, 2026
+          </p>
+          <h2 class="font-script" style="font-size: clamp(2.2rem, 7vw, 3.4rem); color: var(--primary); margin: 0">
+            Our Pittsburgh Summer
+          </h2>
+          <p style="max-width: 560px; margin: 0.7rem auto 0; font-size: 1.12rem; color: var(--text)">
+            Special events happening around the city while you're here this
+            summer — festivals, free movies in the park, fireworks and more.
+            Dated ones drop straight onto the right day.
+          </p>
+        </div>
+        <div
+          id="summer-grid"
+          style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.2rem"
+        ></div>
+      </section>
+
+      <!-- ===== View: Calendar ===== -->
+      <section id="view-calendar" role="tabpanel" hidden>
+        <div class="clay" style="padding: 1.6rem; margin-bottom: 1.4rem">
+          <div
+            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; gap: 1rem"
+          >
+            <button class="btn btn-ghost" id="cal-prev" aria-label="Previous month">‹</button>
+            <h2 id="cal-month-label" class="font-script" style="font-size: 2.2rem; color: var(--primary); margin: 0; text-align: center"></h2>
+            <button class="btn btn-ghost" id="cal-next" aria-label="Next month">›</button>
+          </div>
+          <div id="cal-grid" class="cal-grid"></div>
+          <div id="day-panel" class="clay-soft" style="padding: 1.2rem; margin-top: 1.3rem; min-height: 90px">
+            <p style="color: var(--text-soft); margin: 0">
+              Tap any day to see what's planned. 💗
+            </p>
+          </div>
+        </div>
+
+        <h3 class="section-title" style="font-size: 2rem; text-align: center; margin: 1.6rem 0 1rem">
+          All our planned dates
+        </h3>
+        <div id="upcoming-list" style="max-width: 640px; margin: 0 auto"></div>
+      </section>
+    </main>
+
+    <footer style="text-align: center; padding: 2rem 1rem 3rem; color: var(--text-soft)">
+      <p class="font-ui" style="font-size: 0.9rem">
+        Made with
+        <svg class="heart-svg" viewBox="0 0 24 24" style="vertical-align: -2px; color: var(--primary)" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.2C.4 8.4 2 5 5.3 5c2 0 3.4 1.2 4.2 2.4l.5.8.5-.8C11.3 6.2 12.7 5 14.7 5 18 5 19.6 8.4 22 11.8 19.5 16.4 12 21 12 21z"/></svg>
+        for Noor · Pittsburgh, Summer 2026
+      </p>
+    </footer>
+
+    <!-- ===== Add-to-calendar modal ===== -->
+    <div
+      class="modal-backdrop"
+      id="modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div class="clay modal">
+        <p class="font-ui" style="color: var(--cta); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 0.3rem">
+          Add to our calendar
+        </p>
+        <h3 id="modal-title" class="font-ui" style="font-weight: 700; font-size: 1.3rem; color: var(--text); margin: 0 0 1.2rem"></h3>
+
+        <label class="field-label" for="date-input">Which day?</label>
+        <input type="date" id="date-input" min="2026-01-01" max="2027-12-31" />
+
+        <label class="field-label" for="note-input" style="margin-top: 1rem">A little note (optional)</label>
+        <textarea id="note-input" placeholder="e.g. 7pm reservation, wear something cozy…"></textarea>
+
+        <div style="display: flex; gap: 0.7rem; margin-top: 1.4rem">
+          <button class="btn btn-ghost" id="modal-cancel" style="flex: 1; justify-content: center">Cancel</button>
+          <button class="btn btn-primary" id="modal-save" style="flex: 1; justify-content: center">
+            <svg class="heart-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.2C.4 8.4 2 5 5.3 5c2 0 3.4 1.2 4.2 2.4l.5.8.5-.8C11.3 6.2 12.7 5 14.7 5 18 5 19.6 8.4 22 11.8 19.5 16.4 12 21 12 21z"/></svg>
+            Save date
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Toast ===== -->
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <svg class="heart-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.2C.4 8.4 2 5 5.3 5c2 0 3.4 1.2 4.2 2.4l.5.8.5-.8C11.3 6.2 12.7 5 14.7 5 18 5 19.6 8.4 22 11.8 19.5 16.4 12 21 12 21z"/></svg>
+      <span></span>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

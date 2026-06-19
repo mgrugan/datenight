@@ -1,0 +1,389 @@
+/* ============================================================
+   Noor Date Nights — Claymorphism theme
+   Palette: romantic pink (#DB2777) + elegant gold (#CA8A04)
+   Fonts:   Great Vibes (display) · Quicksand (UI) · Cormorant Infant (body)
+   ============================================================ */
+
+:root {
+  --primary: #db2777;
+  --primary-dark: #9d174d;
+  --secondary: #f472b6;
+  --cta: #ca8a04;
+  --cta-dark: #a16207;
+  --bg: #fdf2f8;
+  --bg-2: #fce7f3;
+  --surface: #ffffff;
+  --text: #831843;
+  --text-soft: #9d4f73;
+  --shadow-pink: rgba(219, 39, 119, 0.18);
+  --shadow-light: rgba(255, 255, 255, 0.9);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Cormorant Infant", Georgia, serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 12% 18%, #fde4ef 0%, transparent 45%),
+    radial-gradient(circle at 88% 8%, #fbe3f3 0%, transparent 40%),
+    radial-gradient(circle at 50% 110%, #fcd9ea 0%, transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
+  min-height: 100vh;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.font-script {
+  font-family: "Great Vibes", cursive;
+  font-weight: 400;
+}
+.font-ui {
+  font-family: "Quicksand", system-ui, sans-serif;
+}
+
+/* ---------- Claymorphism surfaces ---------- */
+.clay {
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow:
+    8px 8px 18px var(--shadow-pink),
+    -6px -6px 14px var(--shadow-light);
+}
+.clay-soft {
+  background: var(--bg-2);
+  border-radius: 22px;
+  box-shadow:
+    inset 4px 4px 10px var(--shadow-pink),
+    inset -4px -4px 10px var(--shadow-light);
+}
+.clay-inset {
+  box-shadow:
+    inset 3px 3px 8px var(--shadow-pink),
+    inset -3px -3px 8px var(--shadow-light);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+  border: none;
+  border-radius: 18px;
+  padding: 0.7rem 1.4rem;
+  cursor: pointer;
+  transition: transform 0.18s ease-out, box-shadow 0.18s ease-out,
+    background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+.btn:focus-visible {
+  outline: 3px solid var(--cta);
+  outline-offset: 2px;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 5px 5px 12px var(--shadow-pink), -3px -3px 8px var(--shadow-light);
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+.btn-primary:active {
+  box-shadow: inset 3px 3px 8px rgba(157, 23, 77, 0.5);
+  transform: translateY(1px);
+}
+.btn-gold {
+  background: var(--cta);
+  color: #fff;
+  box-shadow: 5px 5px 12px rgba(202, 138, 4, 0.25),
+    -3px -3px 8px var(--shadow-light);
+}
+.btn-gold:hover {
+  background: var(--cta-dark);
+}
+.btn-gold:active {
+  transform: translateY(1px);
+}
+.btn-ghost {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 4px 4px 10px var(--shadow-pink), -3px -3px 8px var(--shadow-light);
+}
+.btn-ghost:hover {
+  color: var(--primary-dark);
+}
+
+/* ---------- Nav tabs ---------- */
+.tab {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-soft);
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  transition: color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.tab:hover {
+  color: var(--primary);
+}
+.tab.active {
+  color: var(--primary);
+  background: var(--bg-2);
+  box-shadow: inset 3px 3px 7px var(--shadow-pink),
+    inset -3px -3px 7px var(--shadow-light);
+}
+.tab:focus-visible {
+  outline: 3px solid var(--cta);
+  outline-offset: 2px;
+}
+
+/* ---------- Idea cards ---------- */
+.idea-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.idea-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 12px 14px 26px var(--shadow-pink),
+    -6px -6px 14px var(--shadow-light);
+}
+
+.badge {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.7rem 0.3rem 0.55rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+}
+
+.meta-row {
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ---------- Pills / filters ---------- */
+.pill {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  background: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 3px 3px 8px var(--shadow-pink), -2px -2px 6px var(--shadow-light);
+}
+.pill:hover {
+  color: var(--primary);
+}
+.pill.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: inset 2px 2px 6px rgba(157, 23, 77, 0.45);
+}
+.pill:focus-visible {
+  outline: 3px solid var(--cta);
+  outline-offset: 2px;
+}
+
+/* ---------- Calendar ---------- */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+.cal-dow {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  text-align: center;
+  padding: 0.3rem 0;
+}
+.cal-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  border: none;
+  background: #fff;
+  cursor: pointer;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-family: "Quicksand", sans-serif;
+  color: var(--text);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 3px 3px 8px var(--shadow-pink), -2px -2px 6px var(--shadow-light);
+  position: relative;
+  min-height: 56px;
+}
+.cal-cell:hover {
+  transform: translateY(-2px);
+}
+.cal-cell:focus-visible {
+  outline: 3px solid var(--cta);
+  outline-offset: 2px;
+}
+.cal-cell.empty {
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+}
+.cal-cell.today {
+  box-shadow: inset 0 0 0 2px var(--cta),
+    3px 3px 8px var(--shadow-pink);
+}
+.cal-cell.has-events {
+  background: var(--bg-2);
+}
+.cal-cell .day-num {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.cal-dot-row {
+  display: flex;
+  gap: 3px;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+.cal-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* ---------- Modal ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(131, 24, 67, 0.35);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 50;
+}
+.modal-backdrop[hidden] {
+  display: none;
+}
+.modal {
+  width: min(440px, 100%);
+  padding: 1.8rem;
+  animation: pop 0.22s ease-out;
+}
+@keyframes pop {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.field-label {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+input[type="date"],
+textarea {
+  font-family: "Quicksand", sans-serif;
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 0.7rem 0.9rem;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1rem;
+  box-shadow: inset 3px 3px 8px var(--shadow-pink),
+    inset -3px -3px 8px var(--shadow-light);
+}
+input[type="date"]:focus,
+textarea:focus {
+  outline: 2px solid var(--cta);
+}
+textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  background: var(--primary);
+  color: #fff;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+  padding: 0.8rem 1.4rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px var(--shadow-pink);
+  transition: transform 0.3s ease;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- Misc ---------- */
+.heart-svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+.section-title {
+  font-family: "Great Vibes", cursive;
+  color: var(--primary);
+  line-height: 1.1;
+}
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

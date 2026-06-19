@@ -46,9 +46,7 @@ export default function Hero({ onSurprise, onCalendar }) {
           variants={rise}
           className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-cream/70"
         >
-          A curated collection of date ideas, restaurants and July 2026 events —
-          all a short walk, bus or drive from Pitt's campus. Find something you
-          love and drop it onto your calendar.
+          I love you Noot Noot
         </motion.p>
 
         <motion.div variants={rise} className="mt-9 flex flex-wrap justify-center gap-3">

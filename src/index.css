@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Satoshi", system-ui, sans-serif;
+  background: #0d0a0f;
+  color: #f4ece8;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Distinctive display face */
+.font-display {
+  font-family: "Fraunces", Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+/* Custom scrollbar — small premium touch */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2030;
+  border-radius: 99px;
+  border: 2px solid #0d0a0f;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a2c42;
+}
+
+::selection {
+  background: rgba(255, 93, 143, 0.3);
+  color: #fff;
+}
+
+/* Animated gradient text */
+.text-gradient {
+  background: linear-gradient(100deg, #ffb877, #ff5d8f, #ffa1bf, #ff5d8f);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glass surface */
+.glass {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+input[type="date"] {
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

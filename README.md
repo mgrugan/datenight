@@ -1,58 +1,58 @@
+# Noor Date Nights
 
-A cute, romantic little date-night planner built for Noor. Browse date ideas
-around the University of Pittsburgh (Oakland) campus, then drop your favorites
-onto a shared calendar.
+A modern, animated date-night planner built for Noor. Browse curated date
+ideas, restaurants and **July 2026 events** around the University of Pittsburgh
+(Oakland) campus — all categorized — then drop your favorites onto a calendar.
+
+## Stack
+
+- **React 18** + **Vite**
+- **Tailwind CSS** for styling
+- **Framer Motion** for animations (staggered hero, animated tab/filter pills,
+  card hover glow, spring modal, animated calendar)
+- Distinctive typography: **Fraunces** (display) + **Satoshi** (UI/body) — not a
+  generic system font
+- Plans persist in the browser via `localStorage`
 
 ## What's inside
 
-- **Date Ideas** — curated evergreen ideas plus a hand-picked set of dinner
-  spots (each with a "~$80 after tip" plan), filterable by category (dinner,
-  culture, outdoors, active, views, movies).
-- **July Events** — a chronological list of real things happening around
-  Oakland and the city in **July 2026** (Cinema in the Park, the Inside Out
-  series, Picklesburgh, the Vintage Grand Prix, Phipps garden evenings and
-  more). Dated events drop straight onto the right day; every item links out
-  to its official page.
-- **Calendar** — a month view (defaults to July 2026) showing everything you've
-  planned, plus a running list of all your date nights. Tap any day to see the
-  plans, add notes, or remove them.
+- **Date Ideas** — one categorized grid of everything: evergreen ideas,
+  dinner spots (each with a "~$80 after tip" plan), and the full July 2026
+  event lineup (each event keeps its date, time, location and official link).
+  Filter by Events, Dinner, Culture, Movies, Outdoors, Active or Views.
+- **Calendar** — a month view (opens on July 2026) showing everything you've
+  planned, with a tap-a-day detail panel and a running list of all your date
+  nights. Dated events drop straight onto the correct day.
 
-Your planned dates are saved in the browser via `localStorage`, so they stick
-around between visits on the same device.
-
-## Running it
-
-It's a plain static site — no build step. Either open `index.html` directly, or
-serve the folder:
+## Run it
 
 ```bash
-python3 -m http.server 8000
-# then visit http://localhost:8000
+npm install
+npm run dev      # local dev server
+npm run build    # production build → dist/
+npm run preview  # preview the production build
 ```
 
-To publish it, enable **GitHub Pages** on this repo (Settings → Pages → deploy
-from branch) and it'll be live.
+`vite.config.js` sets `base: "./"`, so the built `dist/` works on static hosts
+(e.g. GitHub Pages).
 
-## Design
-
-Built following the **UI/UX Pro Max** design system — a clean, editorial,
-minimal-single-column aesthetic:
-
-- **Style:** refined editorial — generous whitespace, hairline borders, restrained color
-- **Palette:** warm ivory (`#FAF7F2`) + deep wine accent (`#8E2C48`)
-- **Fonts:** Playfair Display (display) · Inter (UI / body)
-
-## Structure
+## Project structure
 
 ```
-index.html        # markup + layout
-css/styles.css    # editorial theme
-js/data.js        # ideas, restaurants and events (edit to add your own!)
-js/app.js         # tabs, calendar, and scheduling logic
+index.html              # Vite entry + font links
+src/
+  main.jsx              # React entry
+  App.jsx               # tabs, filtering, state, localStorage
+  data.js               # all ideas, restaurants & events (edit to add more)
+  icons.jsx             # inline SVG icons
+  index.css             # base theme + Tailwind layers
+  components/
+    Hero.jsx            # animated hero
+    Card.jsx            # idea / restaurant / event card
+    Calendar.jsx        # month calendar + plans list
+    Modal.jsx           # add-to-calendar dialog
+    Toast.jsx           # confirmation toast
 ```
-
-Want to add your own? Drop entries into the `IDEAS`, `RESTAURANTS` or `EVENTS`
-arrays in `js/data.js`.
 
 ## Sources
 
@@ -60,5 +60,4 @@ Events and venues link out to their official pages — Phipps Conservatory,
 Carnegie Museum of Art (Inside Out series), Pittsburgh Parks, Picklesburgh, the
 Pittsburgh Vintage Grand Prix, Dollar Bank Cinema in the Park, BikePGH, the
 Pittsburgh Cultural Trust, and each restaurant's own menu. Always double-check
-dates and prices on the official page before you go — annual event dates can
-shift.
+dates and prices on the official page before you go — event dates can shift.

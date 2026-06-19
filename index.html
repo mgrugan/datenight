@@ -2,157 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Noor Date Nights</title>
     <meta
       name="description"
-      content="A date-night planner for Noor — curated ideas, restaurants and July 2026 events around Pitt's campus, all droppable onto a calendar."
+      content="Noor Date Nights — a modern planner of date ideas, restaurants and July 2026 events around Pitt's campus, droppable onto a calendar."
     />
+    <title>Noor Date Nights</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <!-- ===== Header ===== -->
-    <header class="site-header">
-      <div class="header-inner">
-        <div class="wordmark">
-          <span class="mark">Noor Date Nights</span>
-          <span class="sub">Pittsburgh</span>
-        </div>
-        <nav class="tabs" role="tablist" aria-label="Sections">
-          <button class="tab" role="tab" data-tab="ideas">Date Ideas</button>
-          <button class="tab" role="tab" data-tab="events">July Events</button>
-          <button class="tab" role="tab" data-tab="calendar">
-            Calendar<span class="count-chip" id="plan-count"></span>
-          </button>
-        </nav>
-      </div>
-    </header>
-
-    <main>
-      <!-- ===== View: Date Ideas ===== -->
-      <section id="view-ideas" role="tabpanel">
-        <div class="hero">
-          <div class="wrap">
-            <span class="section-eyebrow">For Noor</span>
-            <h1>Pick a date, <em>make a memory.</em></h1>
-            <p>
-              A curated little collection of date ideas, restaurants and summer
-              events — all within a short walk, bus or drive of Pitt's campus.
-              Find something you like and drop it onto the calendar.
-            </p>
-            <div class="hero-actions">
-              <button class="btn btn-primary" id="surprise-btn">Surprise me</button>
-              <button class="btn btn-outline" data-goto="calendar">View calendar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="wrap">
-          <div id="filter-bar" class="filter-bar">
-            <button class="pill active" data-filter="all">All</button>
-            <button class="pill" data-filter="dinner">Dinner</button>
-            <button class="pill" data-filter="culture">Culture</button>
-            <button class="pill" data-filter="outdoors">Outdoors</button>
-            <button class="pill" data-filter="active">Active</button>
-            <button class="pill" data-filter="views">Views</button>
-            <button class="pill" data-filter="movies">Movies</button>
-          </div>
-          <div id="ideas-grid" class="card-grid"></div>
-        </div>
-      </section>
-
-      <!-- ===== View: July Events ===== -->
-      <section id="view-events" role="tabpanel" hidden>
-        <div class="wrap" style="padding-top: 2.6rem">
-          <div class="section-head">
-            <div>
-              <span class="section-eyebrow">July 2026 · near campus</span>
-              <h2>Events this July</h2>
-              <p>
-                Things happening around Oakland and the city this July — free
-                outdoor concerts, movies in the park, festivals and garden
-                evenings. Add any of them straight to the calendar.
-              </p>
-            </div>
-          </div>
-          <div id="events-list" class="event-list"></div>
-        </div>
-      </section>
-
-      <!-- ===== View: Calendar ===== -->
-      <section id="view-calendar" role="tabpanel" hidden>
-        <div class="wrap" style="padding-top: 2.6rem">
-          <div class="cal-head">
-            <button class="icon-btn" id="cal-prev" aria-label="Previous month">‹</button>
-            <h2 id="cal-month-label"></h2>
-            <button class="icon-btn" id="cal-next" aria-label="Next month">›</button>
-          </div>
-          <div id="cal-grid" class="cal-grid"></div>
-
-          <div id="day-panel" class="panel">
-            <p style="color: var(--muted); margin: 0">
-              Select any day to see what's planned.
-            </p>
-          </div>
-
-          <div class="section-head" style="margin: 2.4rem 0 1rem">
-            <div>
-              <span class="section-eyebrow">Your plans</span>
-              <h2>All planned dates</h2>
-            </div>
-          </div>
-          <div id="upcoming-list" class="panel" style="margin-top: 0"></div>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="wrap">
-        Made for Noor · Pittsburgh, Summer 2026 · Your plans are saved on this
-        device.
-      </div>
-    </footer>
-
-    <!-- ===== Add-to-calendar modal ===== -->
-    <div
-      class="modal-backdrop"
-      id="modal"
-      hidden
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-    >
-      <div class="modal">
-        <span class="section-eyebrow">Add to calendar</span>
-        <h3 id="modal-title"></h3>
-
-        <label class="field-label" for="date-input">Which day?</label>
-        <input type="date" id="date-input" min="2026-01-01" max="2027-12-31" />
-
-        <label class="field-label" for="note-input" style="margin-top: 1rem"
-          >A note (optional)</label
-        >
-        <textarea
-          id="note-input"
-          placeholder="e.g. 7pm reservation, bring a blanket…"
-        ></textarea>
-
-        <div class="modal-actions">
-          <button class="btn btn-outline" id="modal-cancel">Cancel</button>
-          <button class="btn btn-primary" id="modal-save">Save date</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-    <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

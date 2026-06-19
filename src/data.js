@@ -184,7 +184,7 @@ export const ITEMS = [
   {
     id: "delta", category: "event",
     title: "Delta (Inside Out series)",
-    blurb: "Free outdoor music and performance right in Oakland — a great low-pressure first date.",
+    blurb: "Free outdoor music and performance right in Oakland",
     where: "Carnegie Museum of Art Sculpture Court, 4400 Forbes Ave",
     date: "2026-07-02", dateLabel: "Thu, Jul 2", time: "5:00 PM",
     link: "https://carnegieart.org/series/inside-out/", linkLabel: "Inside Out series",

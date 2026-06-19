@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ITEMS, FILTERS } from "./data.js";
+import { usePlans } from "./usePlans.js";
 import Hero from "./components/Hero.jsx";
 import Card from "./components/Card.jsx";
 import CalendarView from "./components/Calendar.jsx";
 import Modal from "./components/Modal.jsx";
 import Toast from "./components/Toast.jsx";
 
-const STORE_KEY = "noorDateNights.plans.v3";
 const TABS = [
   { key: "ideas", label: "Date Ideas" },
   { key: "calendar", label: "Calendar" },
@@ -23,17 +23,7 @@ export default function App() {
   const [filter, setFilter] = useState("all");
   const [pending, setPending] = useState(null); // item being scheduled
   const [toast, setToast] = useState("");
-  const [plans, setPlans] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STORE_KEY)) || [];
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem(STORE_KEY, JSON.stringify(plans));
-  }, [plans]);
+  const { plans, addPlan, removePlan, status } = usePlans();
 
   useEffect(() => {
     if (!toast) return;
@@ -52,12 +42,12 @@ export default function App() {
   );
 
   const savePlan = (item, date, note) => {
-    setPlans((p) => [...p, { uid: uid(), itemId: item.id, title: item.title, category: item.category, date, note }]);
+    addPlan({ uid: uid(), itemId: item.id, title: item.title, category: item.category, date, note });
     setPending(null);
     setToast(`Saved — ${item.title} on ${fmtShort(date)}`);
   };
-  const removePlan = (id) => {
-    setPlans((p) => p.filter((x) => x.uid !== id));
+  const onRemove = (id) => {
+    removePlan(id);
     setToast("Removed from your calendar");
   };
   const surprise = () => {
@@ -72,8 +62,26 @@ export default function App() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
           <button onClick={() => goto("ideas")} className="flex items-baseline gap-2.5">
             <span className="font-display text-xl font-semibold italic text-cream">Noor Date Nights</span>
-            <span className="hidden text-[0.6rem] font-bold uppercase tracking-[0.25em] text-cream/40 sm:inline">
-              Pittsburgh
+            <span
+              className="hidden items-center gap-1.5 text-[0.6rem] font-bold uppercase tracking-[0.22em] text-cream/40 sm:inline-flex"
+              title={
+                status === "live"
+                  ? "Shared & synced across devices"
+                  : status === "offline"
+                  ? "Offline — showing saved plans"
+                  : "Connecting…"
+              }
+            >
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${
+                  status === "live"
+                    ? "bg-emerald-400"
+                    : status === "offline"
+                    ? "bg-amber"
+                    : "bg-cream/40"
+                }`}
+              />
+              {status === "live" ? "Synced" : status === "offline" ? "Offline" : "Syncing"}
             </span>
           </button>
 
@@ -142,7 +150,7 @@ export default function App() {
         ) : (
           <motion.main key="calendar"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
-            <CalendarView plans={plans} onRemove={removePlan} onGoto={goto} />
+            <CalendarView plans={plans} onRemove={onRemove} onGoto={goto} />
           </motion.main>
         )}
       </AnimatePresence>
